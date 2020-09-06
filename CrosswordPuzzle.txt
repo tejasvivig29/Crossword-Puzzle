@@ -1,0 +1,166 @@
+import java.io.*;
+import java.util.*;
+public class CrosswordPuzzle{
+	
+	boolean flag = false;
+	class Data{
+		int columnNumber;
+		int rowNumber;
+		int sizeOfWord;
+		char direction;
+		
+		Data(int columnNumber,int rowNumber,int sizeOfWord,int d){
+			this.columnNumber = columnNumber;
+			this.rowNumber = rowNumber;
+			this.sizeOfWord = sizeOfWord;
+			this.direction = (char) d;
+		}
+	}
+	
+	ArrayList<Data> metaData = new ArrayList<Data>();
+	ArrayList<String> words = new ArrayList<String>();
+	ArrayList<String> tempData = new ArrayList<String>();
+	
+	char matrix[][];
+	
+	public boolean loadPuzzle(BufferedReader stream) throws IOException {
+		while(stream.ready()) {
+			tempData.add(stream.readLine());
+		}
+		
+		String arr = tempData.get(0);
+		
+		String input[] = arr.split(" ");
+		
+		int numberOfColumns = (Integer.parseInt(input[0]));
+		int numberOfRows = (Integer.parseInt(input[1]));
+		int numberOfWords = (Integer.parseInt(input[2]));
+		
+		matrix = new char[numberOfRows][numberOfColumns];
+		
+		for(int i = 1;i<=numberOfWords;i++) {
+			String temp = tempData.get(i);
+		    String tempInput[] = temp.split(" ");
+			int c = (Integer.parseInt(tempInput[0]));
+			int r = (Integer.parseInt(tempInput[1]));
+			int w = (Integer.parseInt(tempInput[2]));
+			char d = tempInput[3].charAt(0);
+			Data rowWise = new Data(c,r,w,d);
+			metaData.add(rowWise);
+		}
+		
+		for(int i = numberOfWords + 1; i<=tempData.size()-1;i++)
+		{
+		    	words.add(tempData.get(i));
+		}
+		
+		for(int i=0;i<numberOfRows;i++) {
+			for(int j=0;j<numberOfColumns;j++) {
+				matrix[i][j] = ' ';
+			}
+		}
+		for(int i = 0; i<metaData.size();i++) {
+			
+			int c = metaData.get(i).columnNumber;
+			int r = metaData.get(i).rowNumber;
+			int w = metaData.get(i).sizeOfWord;
+			char d = metaData.get(i).direction;
+		     
+			if(d == 'h') {
+				for(int s = 0;s<w;s++) {
+					matrix[r][c] = '-';
+					c++;
+				}
+			}
+			else if(d == 'v') {
+				for(int t=0;t<w;t++) {
+					matrix[r][c] = '-';
+					r++;
+				}
+			}
+		}
+	    return true;
+	}
+	
+	
+	public boolean solve() {
+		flag = true; 
+		call(0);
+		return true;
+	}
+	
+	
+	public void call(int index) {
+		
+		String arr = tempData.get(0);
+	    String input[] = arr.split(" ");
+		int numberOfColumns = (Integer.parseInt(input[0]));
+		int numberOfRows = (Integer.parseInt(input[1]));
+		
+		if(!flag) {
+			return;
+		}
+		
+		if(index == words.size()) {
+			if(flag) {
+				flag = false;
+			}
+			return;
+		}
+		
+		int i,j,p,q,k;
+		for(i=0;i<numberOfRows;i++) {
+			for(j=0;j<numberOfColumns;j++) {
+				p=i;
+				q=j;
+				for(k=0;k<words.get(index).length() && p+k<numberOfRows;++k) {
+					if(matrix[p+k][q] != '-' && matrix[p+k][q] != words.get(index).charAt(k)) {
+						break;
+					}
+				}
+				
+				if(k==words.get(index).length()) {
+					char [][] temp = matrix;
+					for(k=0;k<words.get(index).length();++k) {
+						matrix[p+k][q] = words.get(index).charAt(k);
+					}
+					call(index+1);
+					matrix = temp;
+				}
+				
+				for(k=0;k<words.get(index).length() && q+k<numberOfRows;++k) {
+					if(matrix[p][q+k] != '-' && matrix[p][q+k] != words.get(index).charAt(k)) {
+						break;
+					}
+				}
+				
+				if(k==words.get(index).length()) {
+					char [][] temp = matrix;
+					for(k=0;k<words.get(index).length();++k) {
+						matrix[p][q+k] = words.get(index).charAt(k);
+					}
+					call(index+1);
+					matrix = temp;
+				}
+			}
+		}
+}
+
+
+public void print() {
+	
+	String arr = tempData.get(0);
+    String input[] = arr.split(" ");
+	int numberOfColumns = (Integer.parseInt(input[0]));
+	int numberOfRows = (Integer.parseInt(input[1]));
+	
+	for(int i=0;i<numberOfRows;i++) {
+		for(int j=0;j<numberOfColumns;j++) {
+			System.out.print(matrix[i][j] + " ");
+		}
+		System.out.println();
+	}
+	
+}
+
+}
