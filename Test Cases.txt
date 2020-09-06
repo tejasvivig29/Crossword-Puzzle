@@ -1,0 +1,28 @@
+Test Cases 
+-----------
+
+
+loadPuzzle(BufferedReader stream)
+-------------
+
+- stream object is null
+- stream object is pointing to an invalid source
+- more than one word same given as an input by the user
+- invalid direction given by the user for the word
+- invalid column number given by the user for the word
+- invalid row number given by the user for the word
+
+solve()
+-------------
+
+- single alphabet should be placed in the grid
+- overlapping words should not be replaced 
+- same length words should not be confused with vertical or horizontal directions
+
+
+print(PrintWriter stream)
+-----------
+
+- stream object is null
+- stream object is pointing to an invalid destination
+
