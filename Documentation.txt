@@ -1,0 +1,87 @@
+
+Overview
+--------
+
+This program takes input from the user in the below given format : -
+
+numberofcolumns numberofrows numberofwords
+columnnumber rownumber sizeofword direction
+word
+
+Post loading all the values, this program tries to place those words in a grid recursively using backtracking, horizontally or vertically
+
+--loadPuzzle(BufferedReader stream) - this function takes buffered reader object as an input 
+this function loads all the values given as input to the corresponding data structures
+
+--solve() - this function solves the puzzle by placing the values in the grid recursively and undoing if required
+
+--print(PrintWriter stream) - this function takes print writer object as an input
+this function prints the matrix solved to the output terminal provided by the user
+
+--choices() - this function displays the number of guesses made while solving the puzzle; the number of times we had to unplace the word already placed in the 
+puzzle to check if the intersection is adjusted properly in the matrix/puzzle
+
+Files and external data
+-----------------------
+
+There are two main files:
+  - FillnPuzzle.java -- this file contains all the above four functions and some extra functions that help in putting words in the grid that 
+    is displayed at a later stage
+
+Data structures and their relations to each other
+-------------------------------------------------
+
+This program contains three array lists and one 2D array that are explained below :-
+
+ArrayList<Data> metaData - this array list contains the object of data class; 
+data class contains column number, row number , size of the word , direction of the word of a particular word that has to be placed in the matrix
+
+ArrayList<String> words - this array list contains the words that are to be placed in the puzzle
+
+char matrix[][] - it contains in each cell, the letters of the words that are placed in the puzzle after solving it
+
+Assumptions
+-----------
+
+- no two same words are given as the input
+- the puzzle is case invariant
+
+Stategy
+-----------
+
+This problem belongs to state space exploration category; that checks for the current state and tries to go to the goal state
+
+if the goal state is not reached, it traces back to the previous state, makes some changes and then creates a new state to check against the goal state
+
+That is what the program is doing, it recursively checks if the word fits in the matrix. if yes , it moves on, else it traces back to the previous state
+of the matrix and checks for the another word.
+
+Algorithm
+----------
+
+1. Create a matrix with given input : total number of rows and total number of columns
+
+2. Initialize a symbol (minus sign in my case) to the cells where the letters are to be placed according to the input provided by the user
+
+5. Running the below given process with a nested for loop for the number of rows as i and number of columns as j (which has to be same in my case : refer 'limitations' section)s
+
+4. Recursively checked for the word to be placed in vertical direction where minus '-' sign is there 
+  
+    - creating a temporary matrix if intersection is correct with the horizontal word 
+
+    - updating the matrix with the temporary matrix
+
+5. Recursively checked for the word to be placed in horizontal direction where minus '-' sign is there
+
+    - creating a temporary matrix if the intersection is correct with the vertical word
+
+    - updating the matrix with the temporary matrix
+
+Limitations
+-----------
+
+- In some cases, the program is unable to put the words int he grid, where intersections are more than 1
+
+
+
+
